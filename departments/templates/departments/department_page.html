@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container">
+        <h1>{{ page.name }}</h1>
+        <p>{{ page.description }}</p>
+
+        <h3>Department Admin:</h3>
+        {% if page.site_admin %}
+            <p>{{ page.site_admin.get_full_name }} ({{ page.site_admin.email }})</p>
+        {% else %}
+            <p>No Site Admin assigned.</p>
+        {% endif %}
+    </div>
+{% endblock %}
