@@ -12,41 +12,42 @@
             <p>No Site Admin assigned.</p>
         {% endif %}
 
-        <div class="announcements-section">
-            <h3>Announcements</h3>
+        <div class="announcements">
+            <h2>Announcements</h2>
             {% if page.announcements.all %}
                 {% for announcement in page.announcements.all %}
-                    <div class="announcement">
-                        <h4>{{ announcement.title }}</h4>
-                        <p>{{ announcement.message }}</p>
-                        <small>Posted on: {{ announcement.date_posted|date:"F d, Y" }}</small>
+                    <div class="announcement-item">
+                        <h3>{{ announcement.title }}</h3>
+                        <div class="announcement-content">
+                            {{ announcement.message|richtext }}
+                        </div>
+                        <div class="announcement-date">
+                            Posted: {{ announcement.date_posted|date:"F j, Y" }}
+                        </div>
                     </div>
                 {% endfor %}
             {% else %}
-                <p>No announcements yet.</p>
+                <p>No announcements available.</p>
             {% endif %}
         </div>
     </div>
 
     <style>
-        .announcements-section {
-            margin-top: 2em;
-            padding: 1em;
-            background-color: #f5f5f5;
+        .department-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
         }
-        .announcement {
-            margin-bottom: 1.5em;
-            padding: 1em;
+        .announcement-item {
+            margin-bottom: 20px;
+            padding: 15px;
             border: 1px solid #ddd;
-            background-color: white;
+            border-radius: 5px;
         }
-        .announcement h4 {
-            margin: 0 0 0.5em 0;
-            color: #333;
-        }
-        .announcement small {
+        .announcement-date {
             color: #666;
-            font-style: italic;
+            font-size: 0.9em;
+            margin-top: 10px;
         }
     </style>
 {% endblock %}
