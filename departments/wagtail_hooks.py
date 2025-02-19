@@ -7,7 +7,7 @@ from wagtail.models import Page
 def register_department_menu():
     return MenuItem(
         "Departments", 
-        reverse("wagtailadmin_explore", args=[Page.objects.get(slug='react').id]),
+        reverse("wagtailadmin_explore", args=[Page.objects.get(slug='home').id]),
         # reverse("create_department"),
         icon_name="group",
         order=200

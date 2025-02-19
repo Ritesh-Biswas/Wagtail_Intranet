@@ -11,5 +11,42 @@
         {% else %}
             <p>No Site Admin assigned.</p>
         {% endif %}
+
+        <div class="announcements-section">
+            <h3>Announcements</h3>
+            {% if page.announcements.all %}
+                {% for announcement in page.announcements.all %}
+                    <div class="announcement">
+                        <h4>{{ announcement.title }}</h4>
+                        <p>{{ announcement.message }}</p>
+                        <small>Posted on: {{ announcement.date_posted|date:"F d, Y" }}</small>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>No announcements yet.</p>
+            {% endif %}
+        </div>
     </div>
+
+    <style>
+        .announcements-section {
+            margin-top: 2em;
+            padding: 1em;
+            background-color: #f5f5f5;
+        }
+        .announcement {
+            margin-bottom: 1.5em;
+            padding: 1em;
+            border: 1px solid #ddd;
+            background-color: white;
+        }
+        .announcement h4 {
+            margin: 0 0 0.5em 0;
+            color: #333;
+        }
+        .announcement small {
+            color: #666;
+            font-style: italic;
+        }
+    </style>
 {% endblock %}

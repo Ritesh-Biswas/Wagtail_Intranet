@@ -1,7 +1,8 @@
 from django.db import models
-from wagtail.admin.panels import FieldPanel
-from wagtail.models import Page
+from wagtail.admin.panels import FieldPanel,InlinePanel
+from wagtail.models import Page, Orderable
 from django.contrib.auth.models import User
+from modelcluster.fields import ParentalKey
 
 class DepartmentPage(Page):
     name = models.CharField(max_length=255, help_text="Enter department name")
@@ -22,6 +23,7 @@ class DepartmentPage(Page):
         FieldPanel("name"),
         FieldPanel("description"),
         FieldPanel("site_admin"),
+        InlinePanel("announcements", label="Announcements"),  # Add this line
     ]
 
     parent_page_types = ["wagtailcore.Page"]  # Can be created under the main site
@@ -29,3 +31,18 @@ class DepartmentPage(Page):
 
     def __str__(self):
         return self.name
+
+
+class DepartmentAnnouncement(Orderable):
+    page = ParentalKey(DepartmentPage, on_delete=models.CASCADE, related_name='announcements')
+    title = models.CharField(max_length=255)
+    message = models.TextField()
+    date_posted = models.DateTimeField(auto_now_add=True)
+    
+    panels = [
+        FieldPanel('title'),
+        FieldPanel('message'),
+    ]
+
+    def __str__(self):
+        return f"{self.title} - {self.date_posted.strftime('%Y-%m-%d')}"
