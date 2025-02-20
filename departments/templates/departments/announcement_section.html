@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags %}
+
+{% block content %}
+<div class="announcement-section">
+    <div class="navigation">
+        <a href="{{ page.get_parent.url }}" class="back-link">← Back to {{ page.get_parent.name }}</a>
+    </div>
+
+    <h1>{{ page.title }}</h1>
+    {% if page.description %}
+        <div class="section-description">
+            {{ page.description|richtext }}
+        </div>
+    {% endif %}
+
+    <div class="announcements-list">
+        {% with announcements=page.get_children.specific.live %}
+            {% if announcements %}
+                {% for announcement in announcements %}
+                    <div class="announcement-card">
+                        <h3><a href="{% pageurl announcement %}">{{ announcement.title }}</a></h3>
+                        <div class="preview">
+                            {{ announcement.announcement_content|truncatewords:30|richtext }}
+                        </div>
+                        <div class="meta">
+                            Posted: {{ announcement.date_posted|date:"F j, Y" }}
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>No announcements available.</p>
+            {% endif %}
+        {% endwith %}
+    </div>
+</div>
+
+<style>
+    .announcement-section {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    .back-link {
+        color: #2b3990;
+        text-decoration: none;
+        display: inline-block;
+        margin-bottom: 20px;
+    }
+    .announcement-card {
+        background: #f9f9f9;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+    .meta {
+        color: #666;
+        font-size: 0.9em;
+        margin-top: 10px;
+    }
+</style>
+{% endblock %}

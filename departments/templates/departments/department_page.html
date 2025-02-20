@@ -1,53 +1,68 @@
 {% extends "base.html" %}
+{% load wagtailcore_tags %}
 
 {% block content %}
-    <div class="container">
-        <h1>{{ page.name }}</h1>
-        <p>{{ page.description }}</p>
+<div class="department-container">
+    <h1>{{ page.name }}</h1>
+    <div class="description">
+        {{ page.description|richtext }}
+    </div>
 
-        <h3>Department Admin:</h3>
-        {% if page.site_admin %}
-            <p>{{ page.site_admin.get_full_name }} ({{ page.site_admin.email }})</p>
-        {% else %}
-            <p>No Site Admin assigned.</p>
-        {% endif %}
-
-        <div class="announcements">
-            <h2>Announcements</h2>
-            {% if page.announcements.all %}
-                {% for announcement in page.announcements.all %}
-                    <div class="announcement-item">
-                        <h3>{{ announcement.title }}</h3>
-                        <div class="announcement-content">
-                            {{ announcement.message|richtext }}
+    <div class="announcements-section">
+        <h2>Announcement Sections</h2>
+        {% with announcement_pages=page.get_children.specific.live %}
+            {% if announcement_pages %}
+                <div class="announcements-list">
+                    {% for announcement_page in announcement_pages %}
+                        <div class="announcement-card">
+                            <h3>
+                                <a href="{% pageurl announcement_page %}">
+                                    {{ announcement_page.announcement_title }}
+                                </a>
+                            </h3>
+                            <div class="announcement-preview">
+                                {{ announcement_page.announcement_content|richtext|truncatewords:30 }}
+                            </div>
+                            <div class="announcement-meta">
+                                Posted: {{ announcement_page.date_posted|date:"F j, Y" }}
+                            </div>
                         </div>
-                        <div class="announcement-date">
-                            Posted: {{ announcement.date_posted|date:"F j, Y" }}
-                        </div>
-                    </div>
-                {% endfor %}
+                    {% endfor %}
+                </div>
             {% else %}
                 <p>No announcements available.</p>
             {% endif %}
-        </div>
+        {% endwith %}
     </div>
+</div>
 
-    <style>
-        .department-container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        .announcement-item {
-            margin-bottom: 20px;
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-        .announcement-date {
-            color: #666;
-            font-size: 0.9em;
-            margin-top: 10px;
-        }
-    </style>
+<style>
+    .department-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    .announcements-list {
+        margin-top: 20px;
+    }
+    .announcement-card {
+        background: #f9f9f9;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+    .announcement-card h3 a {
+        color: #2b3990;
+        text-decoration: none;
+    }
+    .announcement-preview {
+        margin: 10px 0;
+        color: #444;
+    }
+    .announcement-meta {
+        color: #666;
+        font-size: 0.9em;
+    }
+</style>
 {% endblock %}
